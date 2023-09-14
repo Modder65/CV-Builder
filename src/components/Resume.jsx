@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "../styles/App.css";
-import emailIcon from "../assets/email.svg";
-import phoneIcon from "../assets/phone.svg";
-import locationIcon from "../assets/location.svg";
+import emailIcon from "../assets/imgs/email.svg";
+import phoneIcon from "../assets/imgs/phone.svg";
+import locationIcon from "../assets/imgs/location.svg";
 
 function ResumeContainer() {
   return (
@@ -52,6 +52,20 @@ function ResumeContent() {
           <div className="education-info-group">
             <p className="education-info-schoolName">London City University</p>
             <p className="education-info-degree">Bachelors in Economics</p>
+          </div>
+        </div>
+        <div className="education-info">
+          <div className="education-info-group">
+            <p className="dates">
+              08/2020
+              <span> – </span>
+              present
+            </p>
+            <p>New York City, US</p>
+          </div>
+          <div className="education-info-group">
+            <p className="education-info-schoolName">Hidden University</p>
+            <p className="education-info-degree">Masters Degree in Math</p>
           </div>
         </div>
       </div>
