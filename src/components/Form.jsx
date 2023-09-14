@@ -37,7 +37,24 @@ function Sidebar({ setShowFormContainer }) {
 }
 
 function FormContainer({ showFormContainer }) {
-  const [dropMenu, setDropMenu] = useState(false);
+  const [showEducationContent, setShowEducationContent] = useState(false);
+  const [showExperienceContent, setShowExperienceContent] = useState(false);
+  const [rotateEducationIcon, setRotateEducationIcon] = useState(false);
+  const [rotateExperienceIcon, setRotateExperienceIcon] = useState(false);
+
+  const toggleEducationContent = () => {
+    setShowEducationContent((prev) => !prev);
+    setRotateEducationIcon((prev) => !prev);
+    setShowExperienceContent(false);
+    setRotateExperienceIcon(false);
+  };
+
+  const toggleExperienceContent = () => {
+    setShowExperienceContent((prev) => !prev);
+    setRotateExperienceIcon((prev) => !prev);
+    setShowEducationContent(false);
+    setRotateEducationIcon(false);
+  };
 
   return (
     <div className="form-container">
@@ -87,18 +104,24 @@ function FormContainer({ showFormContainer }) {
       </form>
       <div
         className={`add-education-section ${showFormContainer ? "" : "hidden"}`}
-        onClick={() => setDropMenu(true)}
+        onClick={toggleEducationContent}
       >
         <div className="expand-section-container">
-          <button className="expand-section">
+          <button className="expand-section" onClick={toggleEducationContent}>
             <div className="expand-section-header">
               <img src={educationIcon} alt="" />
               <h2>Education</h2>
             </div>
           </button>
-          <img src={expandMoreIcon} alt="" />
+          <img
+            src={expandMoreIcon}
+            alt=""
+            className={rotateEducationIcon ? "rotate-180" : ""}
+          />
         </div>
-        <div className={`section-content ${dropMenu ? "" : "hidden"}`}>
+        <div
+          className={`section-content ${showEducationContent ? "" : "hidden"}`}
+        >
           <div className="forms-container">
             <button className="collapsed-form">
               <p className="collapsed-form-title">London City Univserity</p>
@@ -121,18 +144,24 @@ function FormContainer({ showFormContainer }) {
         className={`add-experience-section ${
           showFormContainer ? "" : "hidden"
         }`}
-        onClick={() => setDropMenu(true)}
+        onClick={toggleExperienceContent}
       >
         <div className="expand-section-container">
-          <button className="expand-section">
+          <button className="expand-section" onClick={toggleExperienceContent}>
             <div className="expand-section-header">
-              <img src={educationIcon} alt="" />
-              <h2>Education</h2>
+              <img src={experienceIcon} alt="" />
+              <h2>Experience</h2>
             </div>
           </button>
-          <img src={expandMoreIcon} alt="" />
+          <img
+            src={expandMoreIcon}
+            alt=""
+            className={rotateExperienceIcon ? "rotate-180" : ""}
+          />
         </div>
-        <div className={`section-content ${dropMenu ? "" : "hidden"}`}>
+        <div
+          className={`section-content ${showExperienceContent ? "" : "hidden"}`}
+        >
           <div className="forms-container">
             <button className="collapsed-form">
               <p className="collapsed-form-title">Umbrella Inc.</p>

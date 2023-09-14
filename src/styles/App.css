@@ -294,6 +294,10 @@ p {
   cursor: pointer;
 }
 
+.expand-section-container img {
+  transition: transform 0.3s ease;
+}
+
 .expand-section {
   background-color: #ffffff;
   border: none;
@@ -307,8 +311,15 @@ p {
 }
 
 .section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
+}
+
+.section-content.show {
+  max-height: 100vh;
 }
 
 .forms-container {
@@ -457,4 +468,8 @@ p {
 
 .hidden {
   display: none;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
 }
