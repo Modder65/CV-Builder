@@ -54,7 +54,7 @@ function ResumeContent() {
             <p className="education-info-degree">Bachelors in Economics</p>
           </div>
         </div>
-        <div className="education-info">
+        <div className="education-info hidden">
           <div className="education-info-group">
             <p className="dates">
               08/2020

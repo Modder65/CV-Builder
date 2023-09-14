@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/App.css";
+import { templateEducationEntries, templateExperienceEntries } from "./data.js";
 import fileIcon from "../assets/imgs/file.svg";
 import editIcon from "../assets/imgs/edit.svg";
 import trashIcon from "../assets/imgs/trash.svg";
@@ -37,10 +38,34 @@ function Sidebar({ setShowFormContainer }) {
 }
 
 function FormContainer({ showFormContainer }) {
+  const [educationEntries, setEducationEntries] = useState(
+    templateEducationEntries
+  );
+  const [experienceEntries, setExperienceEntries] = useState(
+    templateExperienceEntries
+  );
   const [showEducationContent, setShowEducationContent] = useState(false);
   const [showExperienceContent, setShowExperienceContent] = useState(false);
   const [rotateEducationIcon, setRotateEducationIcon] = useState(false);
   const [rotateExperienceIcon, setRotateExperienceIcon] = useState(false);
+
+  const toggleReveal = (section, id, event) => {
+    event.stopPropagation();
+
+    if (section === "education") {
+      setEducationEntries((prev) =>
+        prev.map((entry) =>
+          entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
+        )
+      );
+    } else {
+      setExperienceEntries((prev) =>
+        prev.map((entry) =>
+          entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
+        )
+      );
+    }
+  };
 
   const toggleEducationContent = () => {
     setShowEducationContent((prev) => !prev);
@@ -123,14 +148,15 @@ function FormContainer({ showFormContainer }) {
           className={`section-content ${showEducationContent ? "show" : ""}`}
         >
           <div className="forms-container">
-            <button className="collapsed-form">
-              <p className="collapsed-form-title">London City Univserity</p>
-              <img src={revealedIcon} alt="" />
-            </button>
-            <button className="collapsed-form">
-              <p className="collapsed-form-title">Hidden University</p>
-              <img src={hiddenIcon} alt="" />
-            </button>
+            {educationEntries.map((entry) => (
+              <CollapsedFormEntry
+                key={entry.id}
+                entry={entry}
+                onIconClick={(event) =>
+                  toggleReveal("education", entry.id, event)
+                }
+              />
+            ))}
           </div>
           <button className="create-form">
             <div className="create-form-content">
@@ -163,14 +189,15 @@ function FormContainer({ showFormContainer }) {
           className={`section-content ${showExperienceContent ? "show" : ""}`}
         >
           <div className="forms-container">
-            <button className="collapsed-form">
-              <p className="collapsed-form-title">Umbrella Inc.</p>
-              <img src={revealedIcon} alt="" />
-            </button>
-            <button className="collapsed-form">
-              <p className="collapsed-form-title">Black Mesa Labs</p>
-              <img src={revealedIcon} alt="" />
-            </button>
+            {experienceEntries.map((entry) => (
+              <CollapsedFormEntry
+                key={entry.id}
+                entry={entry}
+                onIconClick={(event) =>
+                  toggleReveal("experience", entry.id, event)
+                }
+              />
+            ))}
           </div>
           <button className="create-form">
             <div className="create-form-content">
@@ -224,6 +251,25 @@ function FormContainer({ showFormContainer }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function CollapsedFormEntry({ entry, onIconClick }) {
+  const [isRevealed, setIsRevealed] = useState(entry.revealed);
+
+  useEffect(() => {
+    setIsRevealed(entry.revealed);
+  }, [entry.revealed]);
+
+  return (
+    <button className="collapsed-form" key={entry.id}>
+      <p className="collapsed-form-title">{entry.title}</p>
+      <img
+        src={isRevealed ? revealedIcon : hiddenIcon}
+        alt=""
+        onClick={onIconClick}
+      />
+    </button>
   );
 }
 
