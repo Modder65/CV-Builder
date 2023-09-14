@@ -120,7 +120,7 @@ function FormContainer({ showFormContainer }) {
           />
         </div>
         <div
-          className={`section-content ${showEducationContent ? "" : "hidden"}`}
+          className={`section-content ${showEducationContent ? "show" : ""}`}
         >
           <div className="forms-container">
             <button className="collapsed-form">
@@ -160,7 +160,7 @@ function FormContainer({ showFormContainer }) {
           />
         </div>
         <div
-          className={`section-content ${showExperienceContent ? "" : "hidden"}`}
+          className={`section-content ${showExperienceContent ? "show" : ""}`}
         >
           <div className="forms-container">
             <button className="collapsed-form">
