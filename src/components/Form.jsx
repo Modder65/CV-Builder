@@ -4,6 +4,7 @@ import { templateEducationEntries, templateExperienceEntries } from "./data.js";
 import fileIcon from "../assets/imgs/file.svg";
 import editIcon from "../assets/imgs/edit.svg";
 import trashIcon from "../assets/imgs/trash.svg";
+import trashIconGrey from "../assets/imgs/trashgrey.svg";
 import educationIcon from "../assets/imgs/education.svg";
 import experienceIcon from "../assets/imgs/experience.svg";
 import expandMoreIcon from "../assets/imgs/expandMore.svg";
@@ -11,13 +12,32 @@ import revealedIcon from "../assets/imgs/revealed.svg";
 import hiddenIcon from "../assets/imgs/hidden.svg";
 import addIcon from "../assets/imgs/add.svg";
 
-function EditSide() {
+function EditSide({
+  fullName,
+  setFullName,
+  email,
+  setEmail,
+  phone,
+  setPhone,
+  address,
+  setAddress,
+}) {
   const [showFormContainer, setShowFormContainer] = useState(true);
 
   return (
     <div className="edit-side">
       <Sidebar setShowFormContainer={setShowFormContainer} />
-      <FormContainer showFormContainer={showFormContainer} />
+      <FormContainer
+        showFormContainer={showFormContainer}
+        fullName={fullName}
+        setFullName={setFullName}
+        email={email}
+        setEmail={setEmail}
+        phone={phone}
+        setPhone={setPhone}
+        address={address}
+        setAddress={setAddress}
+      />
     </div>
   );
 }
@@ -48,7 +68,37 @@ function Sidebar({ setShowFormContainer }) {
   );
 }
 
-function PersonalDetailsForm({ showFormContainer }) {
+function PersonalDetailsForm({
+  showFormContainer,
+  fullName,
+  setFullName,
+  email,
+  setEmail,
+  phone,
+  setPhone,
+  address,
+  setAddress,
+}) {
+  function handleFullName(e) {
+    setFullName(e.target.value);
+    if (fullName === "") return;
+  }
+
+  function handleEmail(e) {
+    setEmail(e.target.value);
+    if (email === "") return;
+  }
+
+  function handlePhone(e) {
+    setPhone(e.target.value);
+    if (phone === "") return;
+  }
+
+  function handleAddress(e) {
+    setAddress(e.target.value);
+    if (address === "") return;
+  }
+
   return (
     <form
       action=""
@@ -59,28 +109,52 @@ function PersonalDetailsForm({ showFormContainer }) {
         <label htmlFor="full-name">
           <span className="label-text">Full Name</span>
         </label>
-        <input type="text" id="full-name" placeholder="First and last name" />
+        <input
+          type="text"
+          id="full-name"
+          placeholder="First and last name"
+          value={fullName}
+          onChange={handleFullName}
+        />
       </div>
       <div className="input-group">
         <label htmlFor="email">
           <span className="label-text">Email</span>
           <span className="recommended-text">&nbsp;&nbsp;recommended</span>
         </label>
-        <input type="email" id="email" placeholder="Enter email" />
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={handleEmail}
+        />
       </div>
       <div className="input-group">
         <label htmlFor="phone-number">
           <span className="label-text">Phone Number</span>
           <span className="recommended-text">&nbsp;&nbsp;recommended</span>
         </label>
-        <input type="tel" id="phone-number" placeholder="Enter phone number" />
+        <input
+          type="tel"
+          id="phone-number"
+          placeholder="Enter phone number"
+          value={phone}
+          onChange={handlePhone}
+        />
       </div>
       <div className="input-group">
         <label htmlFor="address">
           <span className="label-text">Address</span>
           <span className="recommended-text">&nbsp;&nbsp;recommended</span>
         </label>
-        <input type="text" id="address" placeholder="City, Country" />
+        <input
+          type="text"
+          id="address"
+          placeholder="City, Country"
+          value={address}
+          onChange={handleAddress}
+        />
       </div>
     </form>
   );
@@ -146,7 +220,17 @@ function TemplateLoader() {
   );
 }
 
-function FormContainer({ showFormContainer }) {
+function FormContainer({
+  showFormContainer,
+  fullName,
+  setFullName,
+  email,
+  setEmail,
+  phone,
+  setPhone,
+  address,
+  setAddress,
+}) {
   const [educationEntries, setEducationEntries] = useState(
     templateEducationEntries
   );
@@ -158,6 +242,8 @@ function FormContainer({ showFormContainer }) {
     Education: { showContent: false, rotateIcon: false },
     Experience: { showContent: false, rotateIcon: false },
   });
+
+  const [showEducationEntryForm, setShowEducationEntryForm] = useState(true);
 
   const toggleReveal = (section, id, event) => {
     event.stopPropagation();
@@ -183,6 +269,11 @@ function FormContainer({ showFormContainer }) {
     }));
   };
 
+  const toggleEntryForm = (event) => {
+    event.stopPropagation();
+    setShowEducationEntryForm((prev) => !prev);
+  };
+
   const sectionData = [
     {
       title: "Education",
@@ -202,7 +293,17 @@ function FormContainer({ showFormContainer }) {
     <div className="form-container">
       <TemplateLoader />
       {showFormContainer ? (
-        <PersonalDetailsForm showFormContainer={showFormContainer} />
+        <PersonalDetailsForm
+          showFormContainer={showFormContainer}
+          fullName={fullName}
+          setFullName={setFullName}
+          email={email}
+          setEmail={setEmail}
+          phone={phone}
+          setPhone={setPhone}
+          address={address}
+          setAddress={setAddress}
+        />
       ) : (
         <CustomizeSection />
       )}
@@ -213,13 +314,22 @@ function FormContainer({ showFormContainer }) {
           toggleReveal={toggleReveal}
           showFormContainer={showFormContainer}
           toggleSection={toggleSection}
+          toggleEntryForm={toggleEntryForm}
+          showEducationEntryForm={showEducationEntryForm}
         />
       ))}
     </div>
   );
 }
 
-function Section({ section, toggleReveal, showFormContainer, toggleSection }) {
+function Section({
+  section,
+  toggleReveal,
+  showFormContainer,
+  toggleSection,
+  toggleEntryForm,
+  showEducationEntryForm,
+}) {
   return (
     <div
       className={`add-${section.title.toLowerCase()}-section ${
@@ -248,17 +358,22 @@ function Section({ section, toggleReveal, showFormContainer, toggleSection }) {
       </div>
       <div className={`section-content ${section.showContent ? "show" : ""}`}>
         <div className="forms-container">
+          <EducationEntryForm showEducationEntryForm={showEducationEntryForm} />
           {section.entries.map((entry) => (
             <CollapsedFormEntry
               key={entry.id}
               entry={entry}
+              showEducationEntryForm={showEducationEntryForm}
               onIconClick={(event) =>
                 toggleReveal(section.title.toLowerCase(), entry.id, event)
               }
             />
           ))}
         </div>
-        <button className="create-form">
+        <button
+          className={`create-form ${showEducationEntryForm ? "" : "hidden"}`}
+          onClick={toggleEntryForm}
+        >
           <div className="create-form-content">
             <img src={addIcon} alt="" />
             <p>{section.title}</p>
@@ -269,9 +384,12 @@ function Section({ section, toggleReveal, showFormContainer, toggleSection }) {
   );
 }
 
-function CollapsedFormEntry({ entry, onIconClick }) {
+function CollapsedFormEntry({ entry, onIconClick, showEducationEntryForm }) {
   return (
-    <button className="collapsed-form" key={entry.id}>
+    <button
+      className={`collapsed-form ${showEducationEntryForm ? "" : "hidden"}`}
+      key={entry.id}
+    >
       <p className="collapsed-form-title">{entry.title}</p>
       <img
         src={entry.revealed ? revealedIcon : hiddenIcon}
@@ -279,6 +397,71 @@ function CollapsedFormEntry({ entry, onIconClick }) {
         onClick={onIconClick}
       />
     </button>
+  );
+}
+
+function EducationEntryForm({ showEducationEntryForm }) {
+  return (
+    <form
+      action=""
+      className={`education-entry-form ${
+        showEducationEntryForm ? "hidden" : ""
+      }`}
+    >
+      <div className="input-group">
+        <label htmlFor="school">
+          <span className="label-text">School</span>
+        </label>
+        <input
+          type="text"
+          id="school"
+          placeholder="Enter school / university"
+        />
+      </div>
+      <div className="input-group">
+        <label htmlFor="degree">
+          <span className="label-text">Degree</span>
+        </label>
+        <input
+          type="text"
+          id="degree"
+          placeholder="Enter Degree / Field Of Study"
+        />
+      </div>
+      <div className="input-group-date">
+        <div className="start-date">
+          <label htmlFor="startdate">
+            <span className="label-text">Start Date</span>
+          </label>
+          <input type="text" id="startdate" placeholder="Enter Start Date" />
+        </div>
+        <div className="end-date">
+          <label htmlFor="enddate">
+            <span className="label-text">End Date</span>
+          </label>
+          <input type="text" id="enddate" placeholder="Enter End Date" />
+        </div>
+      </div>
+      <div className="input-group">
+        <label htmlFor="location">
+          <span className="label-text">Location</span>
+          <span className="recommended-text">&nbsp;&nbsp;optional</span>
+        </label>
+        <input type="text" id="location" placeholder="Enter Location" />
+      </div>
+      <div className="entry-form-buttons">
+        <div>
+          <button className="delete-button">
+            <img src={trashIconGrey} alt="" />
+            Delete
+          </button>
+        </div>
+        <div>
+          <button className="cancel-button">Cancel</button>
+          <button className="save-button">Save</button>
+        </div>
+      </div>
+    </form>
   );
 }
 

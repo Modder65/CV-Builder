@@ -4,31 +4,36 @@ import emailIcon from "../assets/imgs/email.svg";
 import phoneIcon from "../assets/imgs/phone.svg";
 import locationIcon from "../assets/imgs/location.svg";
 
-function ResumeContainer() {
+function ResumeContainer({ fullName, email, phone, address }) {
   return (
     <div className="resume-container">
-      <ResumeHeader />
+      <ResumeHeader
+        fullName={fullName}
+        email={email}
+        phone={phone}
+        address={address}
+      />
       <ResumeContent />
     </div>
   );
 }
 
-function ResumeHeader() {
+function ResumeHeader({ fullName, email, phone, address }) {
   return (
     <div className="resume-header">
-      <h1>Josephine Meyers</h1>
+      <h1>{fullName}</h1>
       <div className="header-info">
         <div>
           <img src={emailIcon} alt="" />
-          <span>josephine.meyers@mail.co.uk</span>
+          <span>{email}</span>
         </div>
         <div>
           <img src={phoneIcon} alt="" />
-          <span>+44 3245 5521 5521</span>
+          <span>{phone}</span>
         </div>
         <div>
           <img src={locationIcon} alt="" />
-          <span>London, UK</span>
+          <span>{address}</span>
         </div>
       </div>
     </div>
