@@ -23,16 +23,27 @@ function EditSide() {
 }
 
 function Sidebar({ setShowFormContainer }) {
+  const buttons = [
+    {
+      icon: fileIcon,
+      text: "Content",
+      action: () => setShowFormContainer(true),
+    },
+    {
+      icon: editIcon,
+      text: "Customize",
+      action: () => setShowFormContainer(false),
+    },
+  ];
+
   return (
     <div className="sidebar">
-      <button onClick={() => setShowFormContainer(true)}>
-        <img src={fileIcon} alt="" />
-        <p>Content</p>
-      </button>
-      <button onClick={() => setShowFormContainer(false)}>
-        <img src={editIcon} alt="" />
-        <p>Customize</p>
-      </button>
+      {buttons.map((btn, index) => (
+        <button key={index} onClick={btn.action}>
+          <img src={btn.icon} alt="" />
+          <p>{btn.text}</p>
+        </button>
+      ))}
     </div>
   );
 }
@@ -49,37 +60,57 @@ function FormContainer({ showFormContainer }) {
   const [rotateEducationIcon, setRotateEducationIcon] = useState(false);
   const [rotateExperienceIcon, setRotateExperienceIcon] = useState(false);
 
+  useEffect(() => {
+    setRotateEducationIcon(showEducationContent);
+  }, [showEducationContent]);
+
+  useEffect(() => {
+    setRotateExperienceIcon(showExperienceContent);
+  }, [showExperienceContent]);
+
   const toggleReveal = (section, id, event) => {
     event.stopPropagation();
 
-    if (section === "education") {
-      setEducationEntries((prev) =>
-        prev.map((entry) =>
-          entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
-        )
-      );
+    const updateEntries =
+      section === "education" ? setEducationEntries : setExperienceEntries;
+
+    updateEntries((prev) =>
+      prev.map((entry) =>
+        entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
+      )
+    );
+  };
+
+  const toggleSection = (sectionTitle) => {
+    if (sectionTitle === "Education") {
+      setShowEducationContent((prev) => !prev);
+      setShowExperienceContent(false);
     } else {
-      setExperienceEntries((prev) =>
-        prev.map((entry) =>
-          entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
-        )
-      );
+      setShowExperienceContent((prev) => !prev);
+      setShowEducationContent(false);
     }
   };
 
-  const toggleEducationContent = () => {
-    setShowEducationContent((prev) => !prev);
-    setRotateEducationIcon((prev) => !prev);
-    setShowExperienceContent(false);
-    setRotateExperienceIcon(false);
-  };
-
-  const toggleExperienceContent = () => {
-    setShowExperienceContent((prev) => !prev);
-    setRotateExperienceIcon((prev) => !prev);
-    setShowEducationContent(false);
-    setRotateEducationIcon(false);
-  };
+  const sectionData = [
+    {
+      title: "Education",
+      icon: educationIcon,
+      entries: educationEntries,
+      setShowContent: setShowEducationContent,
+      showContent: showEducationContent,
+      setRotateIcon: setRotateEducationIcon,
+      rotateIcon: rotateEducationIcon,
+    },
+    {
+      title: "Experience",
+      icon: experienceIcon,
+      entries: experienceEntries,
+      setShowContent: setShowExperienceContent,
+      showContent: showExperienceContent,
+      setRotateIcon: setRotateExperienceIcon,
+      rotateIcon: rotateExperienceIcon,
+    },
+  ];
 
   return (
     <div className="form-container">
@@ -127,86 +158,15 @@ function FormContainer({ showFormContainer }) {
           <input type="text" id="address" placeholder="City, Country" />
         </div>
       </form>
-      <div
-        className={`add-education-section ${showFormContainer ? "" : "hidden"}`}
-        onClick={toggleEducationContent}
-      >
-        <div className="expand-section-container">
-          <button className="expand-section" onClick={toggleEducationContent}>
-            <div className="expand-section-header">
-              <img src={educationIcon} alt="" />
-              <h2>Education</h2>
-            </div>
-          </button>
-          <img
-            src={expandMoreIcon}
-            alt=""
-            className={rotateEducationIcon ? "rotate-180" : ""}
-          />
-        </div>
-        <div
-          className={`section-content ${showEducationContent ? "show" : ""}`}
-        >
-          <div className="forms-container">
-            {educationEntries.map((entry) => (
-              <CollapsedFormEntry
-                key={entry.id}
-                entry={entry}
-                onIconClick={(event) =>
-                  toggleReveal("education", entry.id, event)
-                }
-              />
-            ))}
-          </div>
-          <button className="create-form">
-            <div className="create-form-content">
-              <img src={addIcon} alt="" />
-              <p>Education</p>
-            </div>
-          </button>
-        </div>
-      </div>
-      <div
-        className={`add-experience-section ${
-          showFormContainer ? "" : "hidden"
-        }`}
-        onClick={toggleExperienceContent}
-      >
-        <div className="expand-section-container">
-          <button className="expand-section" onClick={toggleExperienceContent}>
-            <div className="expand-section-header">
-              <img src={experienceIcon} alt="" />
-              <h2>Experience</h2>
-            </div>
-          </button>
-          <img
-            src={expandMoreIcon}
-            alt=""
-            className={rotateExperienceIcon ? "rotate-180" : ""}
-          />
-        </div>
-        <div
-          className={`section-content ${showExperienceContent ? "show" : ""}`}
-        >
-          <div className="forms-container">
-            {experienceEntries.map((entry) => (
-              <CollapsedFormEntry
-                key={entry.id}
-                entry={entry}
-                onIconClick={(event) =>
-                  toggleReveal("experience", entry.id, event)
-                }
-              />
-            ))}
-          </div>
-          <button className="create-form">
-            <div className="create-form-content">
-              <img src={addIcon} alt="" />
-              <p>Experience</p>
-            </div>
-          </button>
-        </div>
-      </div>
+      {sectionData.map((section, index) => (
+        <Section
+          key={index}
+          section={section}
+          toggleReveal={toggleReveal}
+          showFormContainer={showFormContainer}
+          toggleSection={toggleSection} // Pass the toggleSection function to the Section component
+        />
+      ))}
       <div className={`customize ${showFormContainer ? "hidden" : ""}`}>
         <div className="customize-layout">
           <h2>Layout</h2>
@@ -254,18 +214,66 @@ function FormContainer({ showFormContainer }) {
   );
 }
 
+function Section({ section, toggleReveal, showFormContainer, toggleSection }) {
+  return (
+    <div
+      className={`add-${section.title.toLowerCase()}-section ${
+        showFormContainer ? "" : "hidden"
+      }`}
+      onClick={() => {
+        toggleSection(section.title); // Call toggleSection with the section title as an argument
+        section.setRotateIcon((prev) => !prev); // Toggle the rotation state when the section is clicked
+      }}
+    >
+      <div className="expand-section-container">
+        <button
+          className="expand-section"
+          onClick={(e) => {
+            e.stopPropagation();
+            section.setShowContent((prev) => !prev);
+            section.setRotateIcon((prev) => !prev);
+          }}
+        >
+          <div className="expand-section-header">
+            <img src={section.icon} alt="" />
+            <h2>{section.title}</h2>
+          </div>
+        </button>
+        <img
+          src={expandMoreIcon}
+          alt=""
+          className={section.rotateIcon ? "rotate-180" : ""}
+        />
+      </div>
+      <div className={`section-content ${section.showContent ? "show" : ""}`}>
+        <div className="forms-container">
+          {section.entries.map((entry) => (
+            <CollapsedFormEntry
+              key={entry.id}
+              entry={entry}
+              onIconClick={(event) =>
+                toggleReveal(section.title.toLowerCase(), entry.id, event)
+              }
+            />
+          ))}
+        </div>
+        <button className="create-form">
+          <div className="create-form-content">
+            <img src={addIcon} alt="" />
+            <p>{section.title}</p>
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function CollapsedFormEntry({ entry, onIconClick }) {
-  const [isRevealed, setIsRevealed] = useState(entry.revealed);
-
-  useEffect(() => {
-    setIsRevealed(entry.revealed);
-  }, [entry.revealed]);
-
   return (
     <button className="collapsed-form" key={entry.id}>
       <p className="collapsed-form-title">{entry.title}</p>
       <img
-        src={isRevealed ? revealedIcon : hiddenIcon}
+        src={entry.revealed ? revealedIcon : hiddenIcon}
         alt=""
         onClick={onIconClick}
       />
