@@ -21,6 +21,8 @@ function EditSide({
   setPhone,
   address,
   setAddress,
+  templateOrientation,
+  setTemplateOrientation,
 }) {
   const [showFormContainer, setShowFormContainer] = useState(true);
 
@@ -37,6 +39,8 @@ function EditSide({
         setPhone={setPhone}
         address={address}
         setAddress={setAddress}
+        templateOrientation={templateOrientation}
+        setTemplateOrientation={setTemplateOrientation}
       />
     </div>
   );
@@ -160,22 +164,35 @@ function PersonalDetailsForm({
   );
 }
 
-function CustomizeSection() {
+function CustomizeSection({ templateOrientation, setTemplateOrientation }) {
+  function handleOrientation(orientation) {
+    setTemplateOrientation(orientation);
+  }
+
   return (
     <div className="customize">
       <div className="customize-layout">
         <h2>Layout</h2>
         <div className="col-buttons">
           <button>
-            <div className="top-visual visual"></div>
+            <div
+              className="top-visual visual"
+              onClick={() => handleOrientation("top")}
+            ></div>
             Top
           </button>
           <button>
-            <div className="left-visual visual"></div>
+            <div
+              className="left-visual visual"
+              onClick={() => handleOrientation("left")}
+            ></div>
             Left
           </button>
           <button>
-            <div className="right-visual visual"></div>
+            <div
+              className="right-visual visual"
+              onClick={() => handleOrientation("right")}
+            ></div>
             Right
           </button>
         </div>
@@ -230,6 +247,8 @@ function FormContainer({
   setPhone,
   address,
   setAddress,
+  templateOrientation,
+  setTemplateOrientation,
 }) {
   const [educationEntries, setEducationEntries] = useState(
     templateEducationEntries
@@ -305,7 +324,10 @@ function FormContainer({
           setAddress={setAddress}
         />
       ) : (
-        <CustomizeSection />
+        <CustomizeSection
+          templateOrientation={templateOrientation}
+          setTemplateOrientation={setTemplateOrientation}
+        />
       )}
       {sectionData.map((section, index) => (
         <Section

@@ -4,9 +4,25 @@ import emailIcon from "../assets/imgs/email.svg";
 import phoneIcon from "../assets/imgs/phone.svg";
 import locationIcon from "../assets/imgs/location.svg";
 
-function ResumeContainer({ fullName, email, phone, address }) {
+function ResumeContainer({
+  fullName,
+  email,
+  phone,
+  address,
+  templateOrientation,
+}) {
   return (
-    <div className="resume-container">
+    <div
+      className={`resume-container ${
+        templateOrientation == "top"
+          ? "top"
+          : templateOrientation == "left"
+          ? "left"
+          : templateOrientation == "right"
+          ? "right"
+          : ""
+      }`}
+    >
       <ResumeHeader
         fullName={fullName}
         email={email}
