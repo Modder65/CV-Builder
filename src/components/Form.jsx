@@ -263,6 +263,7 @@ function FormContainer({
   });
 
   const [showEducationEntryForm, setShowEducationEntryForm] = useState(true);
+  const [showExperienceEntryForm, setShowExperienceEntryForm] = useState(true);
 
   const toggleReveal = (section, id, event) => {
     event.stopPropagation();
@@ -288,9 +289,14 @@ function FormContainer({
     }));
   };
 
-  const toggleEntryForm = (event) => {
+  const toggleEducationEntryForm = (event) => {
     event.stopPropagation();
     setShowEducationEntryForm((prev) => !prev);
+  };
+
+  const toggleExperienceEntryForm = (event) => {
+    event.stopPropagation();
+    setShowExperienceEntryForm((prev) => !prev);
   };
 
   const sectionData = [
@@ -336,8 +342,10 @@ function FormContainer({
           toggleReveal={toggleReveal}
           showFormContainer={showFormContainer}
           toggleSection={toggleSection}
-          toggleEntryForm={toggleEntryForm}
+          toggleEducationEntryForm={toggleEducationEntryForm}
           showEducationEntryForm={showEducationEntryForm}
+          toggleExperienceEntryForm={toggleExperienceEntryForm}
+          showExperienceEntryForm={showExperienceEntryForm}
         />
       ))}
     </div>
@@ -349,9 +357,13 @@ function Section({
   toggleReveal,
   showFormContainer,
   toggleSection,
-  toggleEntryForm,
+  toggleEducationEntryForm,
   showEducationEntryForm,
+  toggleExperienceEntryForm,
+  showExperienceEntryForm,
 }) {
+  const isEducationSection = section.title === "Education";
+
   return (
     <div
       className={`add-${section.title.toLowerCase()}-section ${
@@ -380,12 +392,22 @@ function Section({
       </div>
       <div className={`section-content ${section.showContent ? "show" : ""}`}>
         <div className="forms-container">
-          <EducationEntryForm showEducationEntryForm={showEducationEntryForm} />
+          {section.title === "Education" ? (
+            <EducationEntryForm
+              showEducationEntryForm={showEducationEntryForm}
+            />
+          ) : (
+            <ExperienceEntryForm
+              showExperienceEntryForm={showExperienceEntryForm}
+            />
+          )}
           {section.entries.map((entry) => (
             <CollapsedFormEntry
               key={entry.id}
               entry={entry}
+              isEducationSection={isEducationSection}
               showEducationEntryForm={showEducationEntryForm}
+              showExperienceEntryForm={showExperienceEntryForm}
               onIconClick={(event) =>
                 toggleReveal(section.title.toLowerCase(), entry.id, event)
               }
@@ -393,8 +415,20 @@ function Section({
           ))}
         </div>
         <button
-          className={`create-form ${showEducationEntryForm ? "" : "hidden"}`}
-          onClick={toggleEntryForm}
+          className={`create-form ${
+            (
+              isEducationSection
+                ? !showEducationEntryForm
+                : !showExperienceEntryForm
+            )
+              ? "hidden"
+              : ""
+          }`}
+          onClick={
+            isEducationSection
+              ? toggleEducationEntryForm
+              : toggleExperienceEntryForm
+          }
         >
           <div className="create-form-content">
             <img src={addIcon} alt="" />
@@ -406,10 +440,24 @@ function Section({
   );
 }
 
-function CollapsedFormEntry({ entry, onIconClick, showEducationEntryForm }) {
+function CollapsedFormEntry({
+  entry,
+  onIconClick,
+  isEducationSection,
+  showEducationEntryForm,
+  showExperienceEntryForm,
+}) {
   return (
     <button
-      className={`collapsed-form ${showEducationEntryForm ? "" : "hidden"}`}
+      className={`collapsed-form ${
+        (
+          isEducationSection
+            ? !showEducationEntryForm
+            : !showExperienceEntryForm
+        )
+          ? "hidden"
+          : ""
+      }`}
       key={entry.id}
     >
       <p className="collapsed-form-title">{entry.title}</p>
@@ -429,6 +477,7 @@ function EducationEntryForm({ showEducationEntryForm }) {
       className={`education-entry-form ${
         showEducationEntryForm ? "hidden" : ""
       }`}
+      onClick={(event) => event.stopPropagation()}
     >
       <div className="input-group">
         <label htmlFor="school">
@@ -470,6 +519,84 @@ function EducationEntryForm({ showEducationEntryForm }) {
           <span className="recommended-text">&nbsp;&nbsp;optional</span>
         </label>
         <input type="text" id="location" placeholder="Enter Location" />
+      </div>
+      <div className="entry-form-buttons">
+        <div>
+          <button className="delete-button">
+            <img src={trashIconGrey} alt="" />
+            Delete
+          </button>
+        </div>
+        <div>
+          <button className="cancel-button">Cancel</button>
+          <button className="save-button">Save</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+function ExperienceEntryForm({ showExperienceEntryForm }) {
+  return (
+    <form
+      action=""
+      className={`experience-entry-form ${
+        showExperienceEntryForm ? "hidden" : ""
+      }`}
+      onClick={(event) => event.stopPropagation()}
+    >
+      <div className="input-group">
+        <label htmlFor="school">
+          <span className="label-text">School</span>
+        </label>
+        <input
+          type="text"
+          id="school"
+          placeholder="Enter school / university"
+        />
+      </div>
+      <div className="input-group">
+        <label htmlFor="degree">
+          <span className="label-text">Degree</span>
+        </label>
+        <input
+          type="text"
+          id="degree"
+          placeholder="Enter Degree / Field Of Study"
+        />
+      </div>
+      <div className="input-group-date">
+        <div className="start-date">
+          <label htmlFor="startdate">
+            <span className="label-text">Start Date</span>
+          </label>
+          <input type="text" id="startdate" placeholder="Enter Start Date" />
+        </div>
+        <div className="end-date">
+          <label htmlFor="enddate">
+            <span className="label-text">End Date</span>
+          </label>
+          <input type="text" id="enddate" placeholder="Enter End Date" />
+        </div>
+      </div>
+      <div className="input-group">
+        <label htmlFor="location">
+          <span className="label-text">Location</span>
+          <span className="recommended-text">&nbsp;&nbsp;optional</span>
+        </label>
+        <input type="text" id="location" placeholder="Enter Location" />
+      </div>
+      <div className="input-group">
+        <label htmlFor="description">
+          <span className="label-text">Description</span>
+          <span className="recommended-text">&nbsp;&nbsp;optional</span>
+        </label>
+        <textarea
+          id="description"
+          cols="30"
+          rows="10"
+          placeholder="Enter Description"
+        ></textarea>
       </div>
       <div className="entry-form-buttons">
         <div>
