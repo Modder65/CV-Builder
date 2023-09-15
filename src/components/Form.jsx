@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../styles/App.css";
 import { templateEducationEntries, templateExperienceEntries } from "./data.js";
 import fileIcon from "../assets/imgs/file.svg";
@@ -48,6 +48,104 @@ function Sidebar({ setShowFormContainer }) {
   );
 }
 
+function PersonalDetailsForm({ showFormContainer }) {
+  return (
+    <form
+      action=""
+      className={`personal-details ${showFormContainer ? "" : "hidden"}`}
+    >
+      <h2>Personal Details</h2>
+      <div className="input-group">
+        <label htmlFor="full-name">
+          <span className="label-text">Full Name</span>
+        </label>
+        <input type="text" id="full-name" placeholder="First and last name" />
+      </div>
+      <div className="input-group">
+        <label htmlFor="email">
+          <span className="label-text">Email</span>
+          <span className="recommended-text">&nbsp;&nbsp;recommended</span>
+        </label>
+        <input type="email" id="email" placeholder="Enter email" />
+      </div>
+      <div className="input-group">
+        <label htmlFor="phone-number">
+          <span className="label-text">Phone Number</span>
+          <span className="recommended-text">&nbsp;&nbsp;recommended</span>
+        </label>
+        <input type="tel" id="phone-number" placeholder="Enter phone number" />
+      </div>
+      <div className="input-group">
+        <label htmlFor="address">
+          <span className="label-text">Address</span>
+          <span className="recommended-text">&nbsp;&nbsp;recommended</span>
+        </label>
+        <input type="text" id="address" placeholder="City, Country" />
+      </div>
+    </form>
+  );
+}
+
+function CustomizeSection() {
+  return (
+    <div className="customize">
+      <div className="customize-layout">
+        <h2>Layout</h2>
+        <div className="col-buttons">
+          <button>
+            <div className="top-visual visual"></div>
+            Top
+          </button>
+          <button>
+            <div className="left-visual visual"></div>
+            Left
+          </button>
+          <button>
+            <div className="right-visual visual"></div>
+            Right
+          </button>
+        </div>
+      </div>
+      <div className="customize-color">
+        <h2>Color</h2>
+        <label className="accent-color">
+          Accent Color
+          <input type="color" value="#0e374e" />
+        </label>
+      </div>
+      <div className="customize-font">
+        <h2>Fonts</h2>
+        <div className="font-select">
+          <button className="sertif-btn">
+            <span className="font-test">Aa</span>
+            Serif
+          </button>
+          <button>
+            <span className="font-test">Aa</span>
+            Sans
+          </button>
+          <button>
+            <span className="font-test">Aa</span>
+            Mono
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TemplateLoader() {
+  return (
+    <div className="template-loader">
+      <button className="clear-resume">
+        <img src={trashIcon} alt="" />
+        Clear Resume
+      </button>
+      <button className="load-example">Load Example</button>
+    </div>
+  );
+}
+
 function FormContainer({ showFormContainer }) {
   const [educationEntries, setEducationEntries] = useState(
     templateEducationEntries
@@ -55,25 +153,16 @@ function FormContainer({ showFormContainer }) {
   const [experienceEntries, setExperienceEntries] = useState(
     templateExperienceEntries
   );
-  const [showEducationContent, setShowEducationContent] = useState(false);
-  const [showExperienceContent, setShowExperienceContent] = useState(false);
-  const [rotateEducationIcon, setRotateEducationIcon] = useState(false);
-  const [rotateExperienceIcon, setRotateExperienceIcon] = useState(false);
 
-  useEffect(() => {
-    setRotateEducationIcon(showEducationContent);
-  }, [showEducationContent]);
-
-  useEffect(() => {
-    setRotateExperienceIcon(showExperienceContent);
-  }, [showExperienceContent]);
+  const [sectionStates, setSectionStates] = useState({
+    Education: { showContent: false, rotateIcon: false },
+    Experience: { showContent: false, rotateIcon: false },
+  });
 
   const toggleReveal = (section, id, event) => {
     event.stopPropagation();
-
     const updateEntries =
       section === "education" ? setEducationEntries : setExperienceEntries;
-
     updateEntries((prev) =>
       prev.map((entry) =>
         entry.id === id ? { ...entry, revealed: !entry.revealed } : entry
@@ -82,13 +171,16 @@ function FormContainer({ showFormContainer }) {
   };
 
   const toggleSection = (sectionTitle) => {
-    if (sectionTitle === "Education") {
-      setShowEducationContent((prev) => !prev);
-      setShowExperienceContent(false);
-    } else {
-      setShowExperienceContent((prev) => !prev);
-      setShowEducationContent(false);
-    }
+    setSectionStates((prev) => ({
+      ...prev,
+      [sectionTitle]: {
+        showContent: !prev[sectionTitle].showContent,
+        rotateIcon: !prev[sectionTitle].rotateIcon,
+      },
+      ...(sectionTitle === "Education"
+        ? { Experience: { showContent: false, rotateIcon: false } }
+        : { Education: { showContent: false, rotateIcon: false } }),
+    }));
   };
 
   const sectionData = [
@@ -96,120 +188,33 @@ function FormContainer({ showFormContainer }) {
       title: "Education",
       icon: educationIcon,
       entries: educationEntries,
-      setShowContent: setShowEducationContent,
-      showContent: showEducationContent,
-      setRotateIcon: setRotateEducationIcon,
-      rotateIcon: rotateEducationIcon,
+      ...sectionStates.Education,
     },
     {
       title: "Experience",
       icon: experienceIcon,
       entries: experienceEntries,
-      setShowContent: setShowExperienceContent,
-      showContent: showExperienceContent,
-      setRotateIcon: setRotateExperienceIcon,
-      rotateIcon: rotateExperienceIcon,
+      ...sectionStates.Experience,
     },
   ];
 
   return (
     <div className="form-container">
-      <div className="template-loader">
-        <button className="clear-resume">
-          <img src={trashIcon} alt="" />
-          Clear Resume
-        </button>
-        <button className="load-example">Load Example</button>
-      </div>
-      <form
-        action=""
-        className={`personal-details ${showFormContainer ? "" : "hidden"}`}
-      >
-        <h2>Personal Details</h2>
-        <div className="input-group">
-          <label htmlFor="full-name">
-            <span className="label-text">Full Name</span>
-          </label>
-          <input type="text" id="full-name" placeholder="First and last name" />
-        </div>
-        <div className="input-group">
-          <label htmlFor="email">
-            <span className="label-text">Email</span>
-            <span className="recommended-text">&nbsp;&nbsp;recommended</span>
-          </label>
-          <input type="email" id="email" placeholder="Enter email" />
-        </div>
-        <div className="input-group">
-          <label htmlFor="phone-number">
-            <span className="label-text">Phone Number</span>
-            <span className="recommended-text">&nbsp;&nbsp;recommended</span>
-          </label>
-          <input
-            type="tel"
-            id="phone-number"
-            placeholder="Enter phone number"
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="address">
-            <span className="label-text">Address</span>
-            <span className="recommended-text">&nbsp;&nbsp;recommended</span>
-          </label>
-          <input type="text" id="address" placeholder="City, Country" />
-        </div>
-      </form>
+      <TemplateLoader />
+      {showFormContainer ? (
+        <PersonalDetailsForm showFormContainer={showFormContainer} />
+      ) : (
+        <CustomizeSection />
+      )}
       {sectionData.map((section, index) => (
         <Section
           key={index}
           section={section}
           toggleReveal={toggleReveal}
           showFormContainer={showFormContainer}
-          toggleSection={toggleSection} // Pass the toggleSection function to the Section component
+          toggleSection={toggleSection}
         />
       ))}
-      <div className={`customize ${showFormContainer ? "hidden" : ""}`}>
-        <div className="customize-layout">
-          <h2>Layout</h2>
-          <div className="col-buttons">
-            <button>
-              <div className="top-visual visual"></div>
-              Top
-            </button>
-            <button>
-              <div className="left-visual visual"></div>
-              Left
-            </button>
-            <button>
-              <div className="right-visual visual"></div>
-              Right
-            </button>
-          </div>
-        </div>
-        <div className="customize-color">
-          <h2>Color</h2>
-          <label className="accent-color">
-            Accent Color
-            <input type="color" value="#0e374e" />
-          </label>
-        </div>
-        <div className="customize-font">
-          <h2>Fonts</h2>
-          <div className="font-select">
-            <button className="sertif-btn">
-              <span className="font-test">Aa</span>
-              Serif
-            </button>
-            <button>
-              <span className="font-test">Aa</span>
-              Sans
-            </button>
-            <button>
-              <span className="font-test">Aa</span>
-              Mono
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -220,18 +225,14 @@ function Section({ section, toggleReveal, showFormContainer, toggleSection }) {
       className={`add-${section.title.toLowerCase()}-section ${
         showFormContainer ? "" : "hidden"
       }`}
-      onClick={() => {
-        toggleSection(section.title); // Call toggleSection with the section title as an argument
-        section.setRotateIcon((prev) => !prev); // Toggle the rotation state when the section is clicked
-      }}
+      onClick={() => toggleSection(section.title)}
     >
       <div className="expand-section-container">
         <button
           className="expand-section"
           onClick={(e) => {
             e.stopPropagation();
-            section.setShowContent((prev) => !prev);
-            section.setRotateIcon((prev) => !prev);
+            toggleSection(section.title);
           }}
         >
           <div className="expand-section-header">
