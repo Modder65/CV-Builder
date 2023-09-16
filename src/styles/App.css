@@ -125,7 +125,7 @@ body {
   gap: 5px;
 }
 
-input {
+input, textarea {
   border: 2px solid transparent;
   background-color: var(--main-bg-color);
   padding: 10px;
@@ -134,7 +134,7 @@ input {
   margin-bottom: 15px;
 }
 
-input:focus {
+input:focus, textarea:focus {
   border-color: #3b83f6;
   box-shadow: 0 3px 15px rgb(59 131 246 / 20%);
   outline: none;
