@@ -1,36 +1,20 @@
 import { useState } from "react";
 import "../styles/App.css";
-import ResumeContainer from "./Resume.jsx";
-import EditSide from "./Form.jsx";
+import { Resume } from "./Resume.jsx";
+import { Form } from "./Form.jsx";
 
 function App() {
-  const [fullName, setFullName] = useState("Josephine Meyers");
-  const [email, setEmail] = useState("josephine.meyers@mail.co.uk");
-  const [phone, setPhone] = useState("+44 3245 5521 5521");
-  const [address, setAddress] = useState("London, UK");
-  const [templateOrientation, setTemplateOrientation] = useState("top");
+  const [formState, setFormState] = useState({
+     fullName: "Name Here", email: "Email Here", phone: "Phone Number Here", location: "Location Here", description: "",
+    });
+
+    const [educationEntries, setEducationEntries] = useState([]);
+    const [experienceEntries, setExperienceEntries] = useState([]);
 
   return (
     <div className="app">
-      <EditSide
-        fullName={fullName}
-        setFullName={setFullName}
-        email={email}
-        setEmail={setEmail}
-        phone={phone}
-        setPhone={setPhone}
-        address={address}
-        setAddress={setAddress}
-        templateOrientation={templateOrientation}
-        setTemplateOrientation={setTemplateOrientation}
-      />
-      <ResumeContainer
-        fullName={fullName}
-        email={email}
-        phone={phone}
-        address={address}
-        templateOrientation={templateOrientation}
-      />
+      <Form formState={formState} setFormState={setFormState} educationEntries={educationEntries} setEducationEntries={setEducationEntries} experienceEntries={experienceEntries} setExperienceEntries={setExperienceEntries}/>
+      <Resume formState={formState} educationEntries={educationEntries} experienceEntries={experienceEntries}/>
     </div>
   );
 }

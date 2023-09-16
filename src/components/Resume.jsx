@@ -1,142 +1,69 @@
-import { useState } from "react";
-import "../styles/App.css";
+import { v4 as uuidv4 } from 'uuid';
 import emailIcon from "../assets/imgs/email.svg";
 import phoneIcon from "../assets/imgs/phone.svg";
 import locationIcon from "../assets/imgs/location.svg";
 
-function ResumeContainer({
-  fullName,
-  email,
-  phone,
-  address,
-  templateOrientation,
-}) {
+export function Resume({ formState, educationEntries, experienceEntries }) {
   return (
-    <div
-      className={`resume-container ${
-        templateOrientation == "top"
-          ? "top"
-          : templateOrientation == "left"
-          ? "left"
-          : templateOrientation == "right"
-          ? "right"
-          : ""
-      }`}
-    >
-      <ResumeHeader
-        fullName={fullName}
-        email={email}
-        phone={phone}
-        address={address}
-      />
-      <ResumeContent />
+    <div className="resume-container">
+      <ResumeHeader formState={formState}/>
+      <ResumeContent formState={formState} educationEntries={educationEntries} experienceEntries={experienceEntries}/>
     </div>
   );
 }
 
-function ResumeHeader({ fullName, email, phone, address }) {
+function ResumeHeader({ formState }) {
   return (
     <div className="resume-header">
-      <h1>{fullName}</h1>
-      <div className="header-info">
-        <div>
-          <img src={emailIcon} alt="" />
-          <span>{email}</span>
+      <h1>{formState.fullName}</h1>
+      <div className="resume-contact-info">
+        <div className="contact">
+          <img src={emailIcon} alt="Email icon" />
+          <p>{formState.email}</p>
         </div>
-        <div>
-          <img src={phoneIcon} alt="" />
-          <span>{phone}</span>
+        <div className="contact">
+          <img src={phoneIcon} alt="Phone Icon" />
+          <p>{formState.phone}</p>
         </div>
-        <div>
-          <img src={locationIcon} alt="" />
-          <span>{address}</span>
+        <div className="contact">
+          <img src={locationIcon} alt="Location Icon" />
+          <p>{formState.location}</p>
         </div>
       </div>
     </div>
   );
 }
 
-function ResumeContent() {
+function ResumeContent({ educationEntries, experienceEntries }) {
   return (
     <div className="resume-content">
-      <div className="education-info-section">
-        <h3>Education</h3>
-        <div className="education-info">
-          <div className="education-info-group">
-            <p className="dates">
-              08/2020
-              <span> – </span>
-              present
-            </p>
-            <p>New York City, US</p>
+      <h2>Education</h2>
+      {educationEntries.map((entry) => (
+        <div className="education-entry" key={entry.id}>
+          <div className="education-entry-info">
+            <p className="dates">{`${entry.schoolStartDate} - ${entry.schoolEndDate}`}</p>
+            <p>{entry.schoolLocation}</p>
           </div>
-          <div className="education-info-group">
-            <p className="education-info-schoolName">London City University</p>
-            <p className="education-info-degree">Bachelors in Economics</p>
+          <div className="education-entry-info">
+            <p className="education-entry-schoolName">{entry.school}</p>
+            <p className="education-entry-degree">{entry.degree}</p>
           </div>
         </div>
-        <div className="education-info hidden">
-          <div className="education-info-group">
-            <p className="dates">
-              08/2020
-              <span> – </span>
-              present
-            </p>
-            <p>New York City, US</p>
+      ))}
+      <h2>Experience</h2>
+      {experienceEntries.map((entry) => (
+        <div className="experience-entry" key={entry.id}>
+          <div className="experience-entry-info">
+            <p className="dates">{`${entry.workStartDate} - ${entry.workEndDate}`}</p>
+            <p>{entry.workLocation}</p>
           </div>
-          <div className="education-info-group">
-            <p className="education-info-schoolName">Hidden University</p>
-            <p className="education-info-degree">Masters Degree in Math</p>
-          </div>
-        </div>
-      </div>
-      <div className="experience-info-section">
-        <h3>Professional Experience</h3>
-        <div className="experience-info">
-          <div className="experience-info-group">
-            <p className="dates">
-              08/2020
-              <span> – </span>
-              present
-            </p>
-            <p>New York City, US</p>
-          </div>
-          <div className="experience-info-group">
-            <p className="experience-info-companyName">Umbrella Inc.</p>
-            <p className="experience-info-positionTitle">UX & UI Designer</p>
-            <p className="experience-info-description">
-              Designed and prototyped user interface patterns for various
-              clients in various industries, ranging from self-service apps
-              within the telecommunications-sector to mobile games for IOS and
-              Android
-            </p>
+          <div className="experience-entry-info">
+            <p className="experience-entry-companyName">{entry.companyName}</p>
+            <p className="experience-entry-position">{entry.position}</p>
+            <p className="experience-entry-description">{entry.description}</p>
           </div>
         </div>
-        <div className="experience-info">
-          <div className="experience-info-group">
-            <p className="dates">
-              04/2018
-              <span> – </span>
-              02/2019
-            </p>
-            <p>Berlin, Germany</p>
-          </div>
-          <div className="experience-info-group">
-            <p className="experience-info-companyName">Black Mesa Labs</p>
-            <p className="experience-info-positionTitle">
-              UX Research Assistant
-            </p>
-            <p className="experience-info-description">
-              Supported senior researchers on accessibility standards for the
-              open web. Created and usability tested wireframes and prototypes.
-              Produced interactive documentation for quick onboarding of new
-              researchers.
-            </p>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
-
-export default ResumeContainer;
