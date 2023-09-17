@@ -1,5 +1,7 @@
 # Resume Builder
 
+[Live Demo](https://cv-builder-60o.pages.dev/)
+
 ## Overview
 The Resume Builder is a user-friendly application designed to help individuals create professional resumes with ease. Users can enter their personal, educational, and professional details, which are then dynamically added to a customizable resume template.
 
@@ -13,3 +15,4 @@ The Resume Builder is a user-friendly application designed to help individuals c
 - **React**: For building the user interface.
 - **CSS**: Used for styling the application to provide a rich user experience.
 - **Vite**: A toolchain used to serve and bundle my React application.
+
