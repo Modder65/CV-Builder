@@ -8,7 +8,6 @@ The Resume Builder is a user-friendly application designed to help individuals c
 ## Features
 - **Dynamic Resume Builder**: Real-time updates on the resume as you fill in your details.
 - **Customizable Layouts and Fonts**: Choose from different layouts and fonts to personalize your resume.
-- **Printable**: Once you're satisfied with your resume, you can print it directly from the browser.
 - **Responsive Design**: The resume container is always in the viewport when scrolling for ease of use.
 
 ## Technologies Used
