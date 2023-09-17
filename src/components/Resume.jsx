@@ -1,13 +1,24 @@
-import { v4 as uuidv4 } from 'uuid';
 import emailIcon from "../assets/imgs/email.svg";
 import phoneIcon from "../assets/imgs/phone.svg";
 import locationIcon from "../assets/imgs/location.svg";
 
-export function Resume({ formState, educationEntries, experienceEntries }) {
+export function Resume({
+  formState,
+  educationEntries,
+  experienceEntries,
+  resumeOrientation,
+  fontClass,
+}) {
   return (
-    <div className="resume-container">
-      <ResumeHeader formState={formState}/>
-      <ResumeContent formState={formState} educationEntries={educationEntries} experienceEntries={experienceEntries}/>
+    <div
+      className={`resume-container ${resumeOrientation} ${fontClass}`}
+    >
+      <ResumeHeader formState={formState} />
+      <ResumeContent
+        formState={formState}
+        educationEntries={educationEntries}
+        experienceEntries={experienceEntries}
+      />
     </div>
   );
 }

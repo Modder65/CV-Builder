@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tinos:wght@400&display=swap');
+
 :root {
   --main-bg-color: #f3f4f6;
   --resume-accent: #0e374e;
@@ -39,6 +43,9 @@ body {
   width: 800px;
   background-color: #fff;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s;
+  position: sticky;
+  top: 50px;
 }
 
 .resume-header {
@@ -56,6 +63,7 @@ body {
   margin: 0;
   font-size: var(--h1-font-size);
   color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .resume-contact-info {
@@ -75,12 +83,17 @@ body {
   height: auto;
 }
 
+.contact img:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s;
+}
+
+
 .resume-content {
   width: 75%;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
 }
 
 .resume-content h2 {
@@ -90,11 +103,19 @@ body {
   background-color: var(--resume-section-bg-color);
   color: var(--resume-accent);
   font-size: var(--h2-font-size);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .education-entry, .experience-entry {
   display: flex;
   gap: 50px;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #f0f0f0;  
+  background-color: #fafafa;  
+  border-radius: 10px;  
 }
 
 .education-entry-schoolName {
@@ -103,6 +124,76 @@ body {
 
 .experience-entry-companyName {
   font-weight: bold;
+}
+
+.top {
+  flex-direction: column;
+}
+
+.left {
+  flex-direction: row;
+}
+
+.left, .right {
+  align-items: stretch;
+}
+
+.left .resume-header, 
+.right .resume-header {
+  width: 40%; /* Adjusted width */
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 20px;
+}
+
+.left .resume-header h1,
+.right .resume-header h1 {
+  text-align: center;
+}
+
+.left .resume-content, 
+.right .resume-content {
+  width: 60%; /* Adjusted width */
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.right {
+  flex-direction: row-reverse;
+}
+
+.right .resume-content {
+  align-self: flex-start; /* Aligns content to the start in right orientation */
+}
+
+/* Adjustments for the contact info display in left and right orientations */
+.left .resume-contact-info, 
+.right .resume-contact-info {
+  flex-direction: column; 
+  gap: 20px;
+  align-items: center;
+}
+
+.left .contact, 
+.right .contact {
+  flex-direction: row;
+  align-items: center;
+}
+
+
+/* Adjustments for the contact info display in left and right orientations */
+.left .resume-contact-info, 
+.right .resume-contact-info {
+  flex-direction: column; /* This sets the flex-direction to column */
+  gap: 5px;
+}
+
+.left .contact, 
+.right .contact {
+  flex-direction: row;
+  align-items: center;
 }
 
 /* FORM */
@@ -116,7 +207,7 @@ body {
   border: 1px solid transparent;
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .input-group {
@@ -149,4 +240,158 @@ input:focus, textarea:focus {
   border: 4px solid #eef0f4;
   border-radius: 18px;
   cursor: pointer;
+}
+
+.add-education-entry:hover, .add-experience-entry:hover {
+  border-color: var(--resume-accent);
+}
+
+.layout-choices, .font-choices {
+  display: flex;
+  justify-content: space-around;
+}
+
+.layout-choices button, .font-choices button  {
+  background-color: #fff;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.layout-choices button:hover, 
+.font-choices button:hover {
+  background-color: var(--resume-accent);
+  color: #fff;
+}
+
+.add-education-entry, 
+.add-experience-entry, 
+.layout-choices button, 
+.font-choices button {
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.font-choices button:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.choice {
+  border: 1px solid gray;
+  border-radius: 8px;
+  width: 60px;
+  height: 60px;
+}
+.roboto-choice, .nunito-choice, .tinos-choice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--resume-accent);
+  color: #fff;
+  font-size: 24px;
+}
+
+.roboto-choice {
+  font-family: 'Roboto', sans-serif;
+}
+
+.nunito-choice {
+  font-family: 'Nunito', sans-serif;
+}
+
+.tinos-choice {
+  font-family: 'Tinos', serif;
+}
+
+.font-roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+.font-nunito {
+  font-family: 'Nunito', sans-serif;
+}
+
+.font-tinos {
+  font-family: 'Tinos', serif;
+  letter-spacing: 1px;
+}
+
+.top-choice {
+  background: linear-gradient(180deg,var(--resume-accent) 50%,#fff 50%);
+}
+
+.left-choice {
+  background: linear-gradient(90deg,var(--resume-accent) 50%,#fff 50%);
+}
+
+.right-choice {
+  background: linear-gradient(90deg,#fff 50%,var(--resume-accent) 50%);
+}
+
+/* CUSTOM ALERT MESSAGE FOR FORM */
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 300px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  position: relative;
+  background-color: var(--resume-accent);
+  padding: 20px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't increase width */
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px; /* Adjusted position */
+  right: 10px; /* Adjusted position */
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ffa;
+  transform: scale(1.2);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body p {
+  margin: 0;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--resume-accent);
+}
+
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

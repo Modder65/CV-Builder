@@ -1,8 +1,15 @@
-# React + Vite
+# Resume Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+The Resume Builder is a user-friendly application designed to help individuals create professional resumes with ease. Users can enter their personal, educational, and professional details, which are then dynamically added to a customizable resume template.
 
-Currently, two official plugins are available:
+## Features
+- **Dynamic Resume Builder**: Real-time updates on the resume as you fill in your details.
+- **Customizable Layouts and Fonts**: Choose from different layouts and fonts to personalize your resume.
+- **Printable**: Once you're satisfied with your resume, you can print it directly from the browser.
+- **Responsive Design**: The resume container is always in the viewport when scrolling for ease of use.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- **React**: For building the user interface.
+- **CSS**: Used for styling the application to provide a rich user experience.
+- **Vite**: A toolchain used to serve and bundle my React application.
